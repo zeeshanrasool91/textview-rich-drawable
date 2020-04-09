@@ -1,9 +1,10 @@
 package com.tolstykh.textviewrichdrawable;
 
 import android.content.Context;
-import android.support.annotation.DrawableRes;
-import android.support.v7.widget.AppCompatCheckBox;
 import android.util.AttributeSet;
+
+import androidx.annotation.DrawableRes;
+import androidx.appcompat.widget.AppCompatCheckBox;
 
 import com.tolstykh.textviewrichdrawable.helper.RichDrawableHelper;
 

@@ -1,6 +1,7 @@
 package com.tolstykh.textviewrichdrawable;
 
-import android.support.annotation.DrawableRes;
+
+import androidx.annotation.DrawableRes;
 
 public interface DrawableEnriched {
 
