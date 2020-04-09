@@ -29,5 +29,5 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'com.google.android.material:material:1.1.0'
     implementation project(path: ':library')
-    //compile 'com.tolstykh.textviewrichdrawable:textview-rich-drawable:0.3.2'
+    //implementation project(path: ':libraryV2')
 }

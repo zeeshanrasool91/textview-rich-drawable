@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <declare-styleable name="TextViewRichDrawable">
+        <attr name="compoundDrawableWidth" format="dimension" />
+        <attr name="compoundDrawableHeight" format="dimension" />
+        <attr name="compoundDrawableStartWidth" format="dimension" />
+        <attr name="compoundDrawableStartHeight" format="dimension" />
+        <attr name="compoundDrawableEndWidth" format="dimension" />
+        <attr name="compoundDrawableEndHeight" format="dimension" />
+        <attr name="compoundDrawableBottomWidth" format="dimension" />
+        <attr name="compoundDrawableBottomHeight" format="dimension" />
+        <attr name="compoundDrawableTopWidth" format="dimension" />
+        <attr name="compoundDrawableTopHeight" format="dimension" />
+        <attr name="widthHeightAllSame" format="boolean" />
+        <attr name="drawableTintStart" format="reference" />
+        <attr name="drawableTintEnd" format="reference" />
+        <attr name="drawableTintBottom" format="reference" />
+        <attr name="drawableTintTop" format="reference" />
+    </declare-styleable>
+</resources>
