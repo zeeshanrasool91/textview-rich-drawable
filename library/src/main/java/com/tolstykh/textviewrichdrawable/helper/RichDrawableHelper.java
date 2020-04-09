@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.ColorInt;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.core.view.ViewCompat;
@@ -48,7 +49,7 @@ public class RichDrawableHelper implements DrawableEnriched {
             mDrawableTopVectorId = array.getResourceId(R.styleable.TextViewRichDrawable_drawableTopVector, UNDEFINED);
             mDrawableEndVectorId = array.getResourceId(R.styleable.TextViewRichDrawable_drawableEndVector, UNDEFINED);
             mDrawableBottomVectorId = array.getResourceId(R.styleable.TextViewRichDrawable_drawableBottomVector, UNDEFINED);
-            mDrawableTint = array.getColor(R.styleable.TextViewRichDrawable_drawableTint, UNDEFINED);
+            mDrawableTint = array.getColor(R.styleable.TextViewRichDrawable_compoundDrawableTint, UNDEFINED);
         } finally {
             array.recycle();
         }
@@ -62,15 +63,22 @@ public class RichDrawableHelper implements DrawableEnriched {
 
     private void initCompoundDrawables(TextView textView, int drawableStartVectorId, int drawableTopVectorId,
                                        int drawableEndVectorId, int drawableBottomVectorId) {
-        Drawable[] drawables = textView.getCompoundDrawables();
-
-        inflateVectors(textView, drawableStartVectorId, drawableTopVectorId, drawableEndVectorId,
-                drawableBottomVectorId, drawables);
+        Drawable[] drawables;
+        if (android.os.Build.VERSION.SDK_INT <= android.os.Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            drawables = textView.getCompoundDrawables();
+        } else {
+            drawables = textView.getCompoundDrawablesRelative();
+        }
+        inflateVectors(textView, drawableStartVectorId, drawableTopVectorId, drawableEndVectorId, drawableBottomVectorId, drawables);
         scale(drawables);
         tint(drawables);
 
-        textView.setCompoundDrawables(drawables[LEFT_DRAWABLE_INDEX], drawables[TOP_DRAWABLE_INDEX],
-                drawables[RIGHT_DRAWABLE_INDEX], drawables[BOTTOM_DRAWABLE_INDEX]);
+
+        if (android.os.Build.VERSION.SDK_INT <= android.os.Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            textView.setCompoundDrawables(drawables[LEFT_DRAWABLE_INDEX], drawables[TOP_DRAWABLE_INDEX], drawables[RIGHT_DRAWABLE_INDEX], drawables[BOTTOM_DRAWABLE_INDEX]);
+        } else {
+            textView.setCompoundDrawablesRelative(drawables[LEFT_DRAWABLE_INDEX], drawables[TOP_DRAWABLE_INDEX], drawables[RIGHT_DRAWABLE_INDEX], drawables[BOTTOM_DRAWABLE_INDEX]);
+        }
     }
 
     private void inflateVectors(TextView textView, int drawableStartVectorId, int drawableTopVectorId,
@@ -153,7 +161,7 @@ public class RichDrawableHelper implements DrawableEnriched {
     }
 
     private Drawable getVectorDrawable(@DrawableRes int resId) {
-        return ResourcesCompat.getDrawable(mContext.getResources(), resId, mContext.getTheme());
+        return ContextCompat.getDrawable(mContext, resId);
     }
 
     /**
