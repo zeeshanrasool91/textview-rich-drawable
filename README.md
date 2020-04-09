@@ -65,7 +65,39 @@ repositories {
 ```groovy
 compile 'com.tolstykh.textviewrichdrawable:textview-rich-drawable:0.3.2'
 ```
-
+## V2 Is in Progress
+```xml
+<com.tolstykh.textviewrichdrawable.TextViewRichDrawable
+        android:id="@+id/textView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="TextViewRichDrawable: WITH SIZE\nAll Drawable is 48 only Only Bottom is 24"
+        app:compoundDrawableBottomHeight="24dp"
+        app:compoundDrawableBottomWidth="24dp"
+        app:compoundDrawableEndHeight="56dp"
+        app:compoundDrawableEndWidth="56dp"
+        app:compoundDrawableHeight="48dp"
+        app:compoundDrawableStartHeight="36dp"
+        app:compoundDrawableStartWidth="36dp"
+        app:compoundDrawableTopHeight="12dp"
+        app:compoundDrawableTopWidth="12dp"
+        app:compoundDrawableWidth="48dp"
+        app:drawableBottomCompat="@drawable/ic_png_bottom"
+        app:drawableEndCompat="@drawable/ic_png_end"
+        app:drawableStartCompat="@drawable/ic_png_start"
+        app:drawableTint="@color/colorAccent"
+        app:drawableTopCompat="@drawable/ic_png_top"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:drawableTintBottom="@color/bottom"
+        app:drawableTintTop="@color/top"
+        app:drawableTintStart="@color/start"
+        app:drawableTintEnd="@color/end"
+        app:widthHeightAllSame="true" />
+```
 ## License
 
     Copyright 2016 Oleksandr Tolstykh
