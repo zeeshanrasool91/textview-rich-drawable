@@ -39,6 +39,10 @@ public class RichDrawableHelper implements DrawableEnriched {
     private int mDrawableBottomHeight;
 
     private boolean allSame;
+    private boolean scaleStart;
+    private boolean scaleEnd;
+    private boolean scaleTop;
+    private boolean scaleBottom;
     @ColorInt
     private int drawableTintStart;
     @ColorInt
@@ -74,6 +78,10 @@ public class RichDrawableHelper implements DrawableEnriched {
             mDrawableBottomHeight = array.getDimensionPixelSize(R.styleable.TextViewRichDrawable_compoundDrawableBottomHeight, UNDEFINED);
             //Sizing Attributes
             allSame = array.getBoolean(R.styleable.TextViewRichDrawable_widthHeightAllSame, true);
+            scaleStart = array.getBoolean(R.styleable.TextViewRichDrawable_scaleStart, IS_SCALABLE);
+            scaleEnd = array.getBoolean(R.styleable.TextViewRichDrawable_scaleEnd, IS_SCALABLE);
+            scaleTop = array.getBoolean(R.styleable.TextViewRichDrawable_scaleTop, IS_SCALABLE);
+            scaleBottom = array.getBoolean(R.styleable.TextViewRichDrawable_scaleBottom, IS_SCALABLE);
 
             drawableTintStart = array.getColor(R.styleable.TextViewRichDrawable_drawableTintStart, UNDEFINED);
             drawableTintEnd = array.getColor(R.styleable.TextViewRichDrawable_drawableTintEnd, UNDEFINED);
@@ -98,24 +106,44 @@ public class RichDrawableHelper implements DrawableEnriched {
             //Log.d("IndexTest", i + "" + drawables[i]);
             switch (i) {
                 case START_DRAWABLE_INDEX:
-                    mDrawableWidth = setValue(defaultDrawableWidth, mDrawableStartWidth);
-                    mDrawableHeight = setValue(defaultDrawableHeight, mDrawableStartHeight);
+                    if (scaleStart) {
+                        mDrawableWidth = setValue(defaultDrawableWidth, mDrawableStartWidth);
+                        mDrawableHeight = setValue(defaultDrawableHeight, mDrawableStartHeight);
+                    } else {
+                        mDrawableWidth = 0;
+                        mDrawableHeight = 0;
+                    }
                     drawableTint = drawableTintStart;
                     break;
                 case END_DRAWABLE_INDEX:
-                    mDrawableWidth = setValue(defaultDrawableWidth, mDrawableEndWidth);
-                    mDrawableHeight = setValue(defaultDrawableHeight, mDrawableEndHeight);
-                    drawableTint = drawableTintEnd;
+                    if (scaleEnd) {
+                        mDrawableWidth = setValue(defaultDrawableWidth, mDrawableEndWidth);
+                        mDrawableHeight = setValue(defaultDrawableHeight, mDrawableEndHeight);
+                        drawableTint = drawableTintEnd;
+                    } else {
+                        mDrawableWidth = 0;
+                        mDrawableHeight = 0;
+                    }
                     break;
                 case TOP_DRAWABLE_INDEX:
-                    mDrawableWidth = setValue(defaultDrawableWidth, mDrawableTopWidth);
-                    mDrawableHeight = setValue(defaultDrawableHeight, mDrawableTopHeight);
-                    drawableTint = drawableTintBottom;
+                    if (scaleTop) {
+                        mDrawableWidth = setValue(defaultDrawableWidth, mDrawableTopWidth);
+                        mDrawableHeight = setValue(defaultDrawableHeight, mDrawableTopHeight);
+                        drawableTint = drawableTintBottom;
+                    } else {
+                        mDrawableWidth = 0;
+                        mDrawableHeight = 0;
+                    }
                     break;
                 case BOTTOM_DRAWABLE_INDEX:
-                    mDrawableWidth = setValue(defaultDrawableWidth, mDrawableBottomWidth);
-                    mDrawableHeight = setValue(defaultDrawableHeight, mDrawableBottomHeight);
-                    drawableTint = drawableTintTop;
+                    if (scaleBottom) {
+                        mDrawableWidth = setValue(defaultDrawableWidth, mDrawableBottomWidth);
+                        mDrawableHeight = setValue(defaultDrawableHeight, mDrawableBottomHeight);
+                        drawableTint = drawableTintTop;
+                    } else {
+                        mDrawableWidth = 0;
+                        mDrawableHeight = 0;
+                    }
                     break;
             }
             Drawable drawable = drawables[i];

@@ -16,5 +16,9 @@
         <attr name="drawableTintEnd" format="reference" />
         <attr name="drawableTintBottom" format="reference" />
         <attr name="drawableTintTop" format="reference" />
+        <attr name="scaleStart" format="boolean" />
+        <attr name="scaleEnd" format="boolean" />
+        <attr name="scaleTop" format="boolean" />
+        <attr name="scaleBottom" format="boolean" />
     </declare-styleable>
 </resources>

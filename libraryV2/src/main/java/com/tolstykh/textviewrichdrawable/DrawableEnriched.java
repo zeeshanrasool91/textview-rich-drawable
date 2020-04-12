@@ -5,6 +5,7 @@ import androidx.annotation.DrawableRes;
 public interface DrawableEnriched {
 
     int UNDEFINED = -1;
+    boolean IS_SCALABLE = true;
 
     /**
      * Returns the compound drawable height of this view.
