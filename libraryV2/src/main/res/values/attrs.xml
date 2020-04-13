@@ -20,5 +20,9 @@
         <attr name="scaleEnd" format="boolean" />
         <attr name="scaleTop" format="boolean" />
         <attr name="scaleBottom" format="boolean" />
+        <attr name="drawableStartVector" format="reference" />
+        <attr name="drawableTopVector" format="reference" />
+        <attr name="drawableEndVector" format="reference" />
+        <attr name="drawableBottomVector" format="reference" />
     </declare-styleable>
 </resources>

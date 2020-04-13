@@ -12,11 +12,12 @@ import android.util.Log;
 import android.widget.TextView;
 
 import androidx.annotation.ColorInt;
+import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
-import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.ViewCompat;
 
 import com.tolstykh.library.R;
-import com.tolstykh.textviewrichdrawable.DensityUtils;
 import com.tolstykh.textviewrichdrawable.DrawableEnriched;
 
 public class RichDrawableHelper implements DrawableEnriched {
@@ -54,6 +55,10 @@ public class RichDrawableHelper implements DrawableEnriched {
 
     private int defaultDrawableWidth;
     private int defaultDrawableHeight;
+    private int mDrawableStartVectorId;
+    private int mDrawableTopVectorId;
+    private int mDrawableEndVectorId;
+    private int mDrawableBottomVectorId;
 
 
     public RichDrawableHelper(@NonNull Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
@@ -87,6 +92,10 @@ public class RichDrawableHelper implements DrawableEnriched {
             drawableTintEnd = array.getColor(R.styleable.TextViewRichDrawable_drawableTintEnd, UNDEFINED);
             drawableTintTop = array.getColor(R.styleable.TextViewRichDrawable_drawableTintTop, UNDEFINED);
             drawableTintBottom = array.getColor(R.styleable.TextViewRichDrawable_drawableTintBottom, UNDEFINED);
+            mDrawableStartVectorId = array.getResourceId(R.styleable.TextViewRichDrawable_drawableStartVector, UNDEFINED);
+            mDrawableTopVectorId = array.getResourceId(R.styleable.TextViewRichDrawable_drawableTopVector, UNDEFINED);
+            mDrawableEndVectorId = array.getResourceId(R.styleable.TextViewRichDrawable_drawableEndVector, UNDEFINED);
+            mDrawableBottomVectorId = array.getResourceId(R.styleable.TextViewRichDrawable_drawableBottomVector, UNDEFINED);
         } finally {
             array.recycle();
         }
@@ -100,8 +109,19 @@ public class RichDrawableHelper implements DrawableEnriched {
         int mDrawableWidth = UNDEFINED;
         int mDrawableHeight = UNDEFINED;
         int drawableTint = UNDEFINED;
-        Drawable[] drawables = textView.getCompoundDrawablesRelative();
-
+        Drawable[] drawables = null;
+        if (android.os.Build.VERSION.SDK_INT <= android.os.Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            drawables = textView.getCompoundDrawables();
+        } else {
+            drawables = textView.getCompoundDrawablesRelative();
+        }
+        if (mDrawableStartVectorId > 0 || mDrawableTopVectorId > 0 || mDrawableEndVectorId > 0 || mDrawableBottomVectorId > 0) {
+            if (android.os.Build.VERSION.SDK_INT <= android.os.Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                textView.setCompoundDrawables(drawables[START_DRAWABLE_INDEX], drawables[TOP_DRAWABLE_INDEX], drawables[END_DRAWABLE_INDEX], drawables[BOTTOM_DRAWABLE_INDEX]);
+            } else {
+                textView.setCompoundDrawablesRelative(drawables[START_DRAWABLE_INDEX], drawables[TOP_DRAWABLE_INDEX], drawables[END_DRAWABLE_INDEX], drawables[BOTTOM_DRAWABLE_INDEX]);
+            }
+        }
         for (int i = 0; i < drawables.length; i++) {
             //Log.d("IndexTest", i + "" + drawables[i]);
             switch (i) {
@@ -155,9 +175,16 @@ public class RichDrawableHelper implements DrawableEnriched {
             applyDrawableTint(drawable, drawableTint);
         }
         //textView.setCompoundDrawables(drawables[START_DRAWABLE_INDEX], drawables[TOP_DRAWABLE_INDEX], drawables[END_DRAWABLE_INDEX], drawables[BOTTOM_DRAWABLE_INDEX]);
-        textView.setCompoundDrawablesRelative(drawables[START_DRAWABLE_INDEX], drawables[TOP_DRAWABLE_INDEX], drawables[END_DRAWABLE_INDEX], drawables[BOTTOM_DRAWABLE_INDEX]);
+        //textView.setCompoundDrawablesRelative(drawables[START_DRAWABLE_INDEX], drawables[TOP_DRAWABLE_INDEX], drawables[END_DRAWABLE_INDEX], drawables[BOTTOM_DRAWABLE_INDEX]);
         //textView.setCompoundDrawablesRelativeWithIntrinsicBounds(drawables[START_DRAWABLE_INDEX], drawables[TOP_DRAWABLE_INDEX], drawables[END_DRAWABLE_INDEX], drawables[BOTTOM_DRAWABLE_INDEX]);
         //textView.setCompoundDrawablesRelativeWithIntrinsicBounds(drawables[START_DRAWABLE_INDEX], drawables[TOP_DRAWABLE_INDEX], drawables[END_DRAWABLE_INDEX], drawables[BOTTOM_DRAWABLE_INDEX]);
+        if (mDrawableStartVectorId > 0 || mDrawableTopVectorId > 0 || mDrawableEndVectorId > 0 || mDrawableBottomVectorId > 0) {
+            if (android.os.Build.VERSION.SDK_INT <= android.os.Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                textView.setCompoundDrawables(drawables[START_DRAWABLE_INDEX], drawables[TOP_DRAWABLE_INDEX], drawables[END_DRAWABLE_INDEX], drawables[BOTTOM_DRAWABLE_INDEX]);
+            } else {
+                textView.setCompoundDrawablesRelative(drawables[START_DRAWABLE_INDEX], drawables[TOP_DRAWABLE_INDEX], drawables[END_DRAWABLE_INDEX], drawables[BOTTOM_DRAWABLE_INDEX]);
+            }
+        }
     }
 
     private void scale(Drawable drawable, int mDrawableHeight, int mDrawableWidth) {
@@ -290,5 +317,47 @@ public class RichDrawableHelper implements DrawableEnriched {
         if (mDrawableTint == UNDEFINED)
             return;
         drawable.setColorFilter(new PorterDuffColorFilter(mDrawableTint, PorterDuff.Mode.SRC_IN));
+    }
+
+    private void inflateVectors(TextView textView, int drawableStartVectorId, int drawableTopVectorId,
+                                int drawableEndVectorId, int drawableBottomVectorId, Drawable[] drawables) {
+        boolean rtl = ViewCompat.getLayoutDirection(textView) == ViewCompat.LAYOUT_DIRECTION_RTL;
+
+        if (drawableStartVectorId != UNDEFINED) {
+            drawables[rtl ? START_DRAWABLE_INDEX : END_DRAWABLE_INDEX] = getVectorDrawable(drawableStartVectorId);
+        }
+        if (drawableTopVectorId != UNDEFINED) {
+            drawables[TOP_DRAWABLE_INDEX] = getVectorDrawable(drawableTopVectorId);
+        }
+        if (drawableEndVectorId != UNDEFINED) {
+            drawables[rtl ? END_DRAWABLE_INDEX : START_DRAWABLE_INDEX] = getVectorDrawable(drawableEndVectorId);
+        }
+        if (drawableBottomVectorId != UNDEFINED) {
+            drawables[BOTTOM_DRAWABLE_INDEX] = getVectorDrawable(drawableBottomVectorId);
+        }
+    }
+
+    private Drawable getVectorDrawable(@DrawableRes int resId) {
+        return ContextCompat.getDrawable(mContext, resId);
+    }
+
+    @Override
+    public void setDrawableStartVectorId(@DrawableRes int id) {
+        mDrawableStartVectorId = id;
+    }
+
+    @Override
+    public void setDrawableEndVectorId(@DrawableRes int id) {
+        mDrawableEndVectorId = id;
+    }
+
+    @Override
+    public void setDrawableTopVectorId(@DrawableRes int id) {
+        mDrawableTopVectorId = id;
+    }
+
+    @Override
+    public void setDrawableBottomVectorId(@DrawableRes int id) {
+        mDrawableBottomVectorId = id;
     }
 }

@@ -20,4 +20,12 @@ public interface DrawableEnriched {
      * @return the width in pixels or {@value UNDEFINED} if undefined.
      */
     int getCompoundDrawableWidth();
+
+    void setDrawableStartVectorId(@DrawableRes int id);
+
+    void setDrawableEndVectorId(@DrawableRes int id);
+
+    void setDrawableTopVectorId(@DrawableRes int id);
+
+    void setDrawableBottomVectorId(@DrawableRes int id);
 }

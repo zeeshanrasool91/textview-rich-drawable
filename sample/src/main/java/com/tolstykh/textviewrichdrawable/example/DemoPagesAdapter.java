@@ -13,7 +13,7 @@ public class DemoPagesAdapter extends FragmentPagerAdapter {
     private final Context mContext;
 
     public DemoPagesAdapter(Context context, FragmentManager fragmentManager, DemoPage[] demoPages) {
-        super(fragmentManager);
+        super(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         mContext = context;
         mDemoPages = demoPages;
     }
